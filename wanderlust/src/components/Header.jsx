@@ -1,6 +1,7 @@
 import { useState } from "react"
 import {Avatar, Stack } from '@mui/material';
 import styled from "styled-components";
+import axios from "axios";
 
 
 export default function Header() {
@@ -10,8 +11,15 @@ export default function Header() {
     return user ? JSON.parse(user) : null;
   };
   
-  const user = getUserFromStorage();
-  // console.log(user.name[0]);
+  // const user_storage = getUserFromStorage();
+
+  const [user, setUser] = useState(getUserFromStorage);
+  
+  let logout = async () => {
+    await axios.get("http://localhost/React%20-%20Laravel/api/api/logout");
+    localStorage.removeItem('user');
+    setUser();
+  }
   return (
     <Container>
     <nav className="navbar navbar-expand-md bg-body-light sticky-top">
@@ -41,7 +49,7 @@ export default function Header() {
 
             <ul className="navbar-nav-menu">
             {user ? (
-                <li><a href="http://localhost/React%20-%20Laravel/api/api/logout"> Logout </a></li>
+                <li><a onClick={logout}> Logout </a></li>
           ) : (
             <>
             <li><a href="/login"> Log in </a></li>
